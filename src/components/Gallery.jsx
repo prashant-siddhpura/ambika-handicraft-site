@@ -9,7 +9,7 @@ const WA_URL = `https://wa.me/${WA_NUMBER}?text=Hello%2C%20I%20would%20like%20to
 const ROW_UNIT = 10  // px — matches grid-auto-rows: 10px
 const ROW_GAP = 14  // px — matches gap: 14px
 
-const READY_THRESHOLD = 0.6  // show gallery once 60% of media is loaded
+const READY_THRESHOLD = 0.8  // show gallery once 80% of media is loaded
 
 /**
  * Sets grid-row-end: span N on each card so the grid acts as a masonry layout.
