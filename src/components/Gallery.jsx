@@ -9,6 +9,8 @@ const WA_URL = `https://wa.me/${WA_NUMBER}?text=Hello%2C%20I%20would%20like%20to
 const ROW_UNIT = 10  // px — matches grid-auto-rows: 10px
 const ROW_GAP = 14  // px — matches gap: 14px
 
+const READY_THRESHOLD = 0.6  // show gallery once 60% of media is loaded
+
 /**
  * Sets grid-row-end: span N on each card so the grid acts as a masonry layout.
  * Formula: span = ceil((cardHeight + gap) / (rowUnit + gap))
@@ -26,6 +28,33 @@ function applyMasonrySpans(grid) {
 
 export default function Gallery({ onGalleryClick, onHomeClick }) {
   const gridRef = useRef(null)
+
+  // ── Gallery loading overlay ───────────────────────────────────────────────
+  const [overlayVisible, setOverlayVisible] = useState(true)   // controls render
+  const [overlayFading, setOverlayFading] = useState(false)    // triggers CSS fade-out
+  const loadedCountRef = useRef(0)
+  const clearedRef = useRef(false)
+  const total = sortedGalleryItems.length
+
+  const triggerFadeOut = useCallback(() => {
+    if (clearedRef.current) return
+    clearedRef.current = true
+    setOverlayFading(true)                          // start CSS fade
+    setTimeout(() => setOverlayVisible(false), 600) // unmount after fade done
+  }, [])
+
+  const onMediaLoaded = useCallback(() => {
+    loadedCountRef.current += 1
+    if (total > 0 && loadedCountRef.current / total >= READY_THRESHOLD) {
+      setTimeout(triggerFadeOut, 120) // small settle delay
+    }
+  }, [total, triggerFadeOut])
+
+  // Safety fallback — always clear overlay after 3s even if media is slow
+  useEffect(() => {
+    const t = setTimeout(triggerFadeOut, 3000)
+    return () => clearTimeout(t)
+  }, [triggerFadeOut])
 
   // ── Lightbox state ────────────────────────────────────────────────────────
   const [lbIndex, setLbIndex] = useState(null) // null = closed
@@ -96,13 +125,20 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
   return (
     <div className="gallery-page" role="main" aria-label="Full Gallery">
 
-      {/* ── Gallery title ─────────────────────────────── */}
-      {/* <div className="gallery-title-row">
-        <h1 className="gp-title">Our Creations</h1>
-        <p className="gp-subtitle">
-          {sortedGalleryItems.length} work{sortedGalleryItems.length !== 1 ? 's' : ''} · 3D LED Wooden Frames
-        </p>
-      </div> */}
+      {/* ── Gallery loading overlay ────────────────────────── */}
+      {overlayVisible && (
+        <div
+          className={`gallery-loading-overlay${overlayFading ? ' gallery-loading-overlay--out' : ''}`}
+          aria-hidden="true"
+        >
+          <div className="gallery-loading-spinner">
+            <svg viewBox="0 0 50 50" className="gls-ring" aria-hidden="true">
+              <circle cx="25" cy="25" r="20" fill="none" strokeWidth="3" />
+            </svg>
+            <span className="gls-label">Loading Gallery…</span>
+          </div>
+        </div>
+      )}
 
       {/* ── Grid masonry ─────────────────────────────── */}
       <div className="gallery-container">
@@ -129,7 +165,7 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
                       controls={!VIDEO_AUTOPLAY}
                       className="gi-video"
                       aria-label={item.alt}
-                      onLoadedMetadata={layout}
+                      onLoadedMetadata={() => { layout(); onMediaLoaded() }}
                       controlsList="nodownload noremoteplayback"
                       disablePictureInPicture
                       onContextMenu={(e) => e.preventDefault()}
@@ -149,7 +185,7 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
                     alt={item.alt}
                     loading="lazy"
                     className="gi-img"
-                    onLoad={layout}
+                    onLoad={() => { layout(); onMediaLoaded() }}
                     draggable={false}
                     onContextMenu={(e) => e.preventDefault()}
                     onDragStart={(e) => e.preventDefault()}
