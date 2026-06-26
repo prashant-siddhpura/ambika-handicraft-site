@@ -89,7 +89,15 @@ export default function SacredCreations({ onViewAll }) {
                       aria-label={item.alt}
                     />
                   ) : (
-                    <img src={item.src} alt={item.alt} loading="lazy" />
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      loading="lazy"
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      onDragStart={(e) => e.preventDefault()}
+                      style={{ pointerEvents: 'none', userSelect: 'none' }}
+                    />
                   )}
 
                 </div>

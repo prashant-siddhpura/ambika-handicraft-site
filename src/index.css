@@ -1353,7 +1353,9 @@ ul {
 }
 
 @keyframes gls-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .gls-label {
@@ -1989,9 +1991,17 @@ video::-webkit-media-controls-mute-button {
   filter: brightness(1.2);
 }
 
-.sanc-social-link--insta { color: #c13584; }
-.sanc-social-link--fb    { color: #1877f2; }
-.sanc-social-link--yt    { color: #ff0000; }
+.sanc-social-link--insta {
+  color: #c13584;
+}
+
+.sanc-social-link--fb {
+  color: #1877f2;
+}
+
+.sanc-social-link--yt {
+  color: #ff0000;
+}
 
 .form-card {
   background: var(--surface-container-low);
@@ -2121,9 +2131,17 @@ footer {
   text-decoration: none;
 }
 
-.footer-social-link--insta:hover { color: #e1306c; }
-.footer-social-link--fb:hover    { color: #1877f2; }
-.footer-social-link--yt:hover    { color: #ff0000; }
+.footer-social-link--insta:hover {
+  color: #e1306c;
+}
+
+.footer-social-link--fb:hover {
+  color: #1877f2;
+}
+
+.footer-social-link--yt:hover {
+  color: #ff0000;
+}
 
 .footer-grid {
   display: grid;
