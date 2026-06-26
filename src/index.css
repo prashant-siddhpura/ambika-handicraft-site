@@ -2863,3 +2863,20 @@ footer {
   pointer-events: auto;
   /* keep clicks active */
 }
+
+/* ── No-save overlay ────────────────────────────────────────────────────────
+   A transparent div placed as a sibling AFTER every <img> or <video>.
+   The wrapper must have position: relative (already true for all card wrappers).
+   Mobile browsers (Vivo, Oppo, Samsung, UC, Mi, default Android browser) detect
+   whatever element is under the finger. If they see a <div> they do NOT show
+   their native "Download / Save image" button — that button only appears on <img>
+   and <video> elements. So this invisible layer silently blocks the feature.
+   z-index keeps it above media but below any real UI controls. ── */
+.no-save-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: transparent;
+  -webkit-touch-callout: none;   /* iOS long-press "Save to Photos" */
+  user-select: none;
+}

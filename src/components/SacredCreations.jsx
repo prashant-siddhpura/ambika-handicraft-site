@@ -87,17 +87,22 @@ export default function SacredCreations({ onViewAll }) {
                       autoPlay={VIDEO_AUTOPLAY}
                       controls={!VIDEO_AUTOPLAY}
                       aria-label={item.alt}
+                      controlsList="nodownload noremoteplayback"
+                      disablePictureInPicture
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   ) : (
-                    <img
-                      src={item.src}
-                      alt={item.alt}
-                      loading="lazy"
-                      draggable={false}
-                      onContextMenu={(e) => e.preventDefault()}
-                      onDragStart={(e) => e.preventDefault()}
-                      style={{ pointerEvents: 'none', userSelect: 'none' }}
-                    />
+                    <>
+                      <img
+                        src={item.src}
+                        alt={item.alt}
+                        loading="lazy"
+                        draggable={false}
+                        onContextMenu={(e) => e.preventDefault()}
+                        onDragStart={(e) => e.preventDefault()}
+                      />
+                      <div className="no-save-overlay" />
+                    </>
                   )}
 
                 </div>

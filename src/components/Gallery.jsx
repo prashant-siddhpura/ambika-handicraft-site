@@ -180,16 +180,19 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
                     <span className="gi-video-badge" aria-hidden="true">▶</span>
                   </>
                 ) : (
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    loading="lazy"
-                    className="gi-img"
-                    onLoad={() => { layout(); onMediaLoaded() }}
-                    draggable={false}
-                    onContextMenu={(e) => e.preventDefault()}
-                    onDragStart={(e) => e.preventDefault()}
-                  />
+                  <>
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      loading="lazy"
+                      className="gi-img"
+                      onLoad={() => { layout(); onMediaLoaded() }}
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      onDragStart={(e) => e.preventDefault()}
+                    />
+                    <div className="no-save-overlay" />
+                  </>
                 )}
 
               </div>
