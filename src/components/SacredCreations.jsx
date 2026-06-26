@@ -91,10 +91,7 @@ export default function SacredCreations({ onViewAll }) {
                   ) : (
                     <img src={item.src} alt={item.alt} loading="lazy" />
                   )}
-                  {/* zoom hint on hover */}
-                  <div className="gi-zoom-hint" aria-hidden="true">
-                    <span className="gi-zoom-icon">⤢</span>
-                  </div>
+
                 </div>
                 <div className="product-info">
                   <p className="name">{item.title}</p>

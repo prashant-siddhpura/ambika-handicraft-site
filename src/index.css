@@ -694,8 +694,13 @@ ul {
   object-fit: cover;
   will-change: transform;
   transform-origin: center center;
-  transition: transform 0.05s linear;
+  opacity: 0;
+  transition: transform 0.05s linear, opacity 1s ease;
   /* tiny smoothing between rAF ticks */
+}
+
+.hero-video--ready {
+  opacity: 1;
 }
 
 /* Dark vignette keeps text legible; JS tweaks opacity on scroll */
@@ -1435,35 +1440,6 @@ video::-webkit-media-controls-mute-button {
   font-size: 13px;
 }
 
-/* ── ZOOM HINT (appears on card hover) ──────────────── */
-.gi-zoom-hint {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 10px;
-  background: rgba(20, 16, 12, 0.38);
-  opacity: 0;
-  transition: opacity 0.28s ease;
-  pointer-events: none;
-}
-
-.gi-card:hover .gi-zoom-hint {
-  opacity: 1;
-}
-
-.gi-zoom-icon {
-  font-size: 28px;
-  color: #fff;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-  transform: scale(0.8);
-  transition: transform 0.28s ease;
-}
-
-.gi-card:hover .gi-zoom-icon {
-  transform: scale(1);
-}
 
 /* ── LIGHTBOX OVERLAY ────────────────────────────────── */
 .lb-overlay {
@@ -1900,24 +1876,7 @@ video::-webkit-media-controls-mute-button {
   gap: var(--sp-sm);
 }
 
-/* ── Instagram follow link — Sanctuary section ── */
-.insta-follow-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: #c13584;
-  text-decoration: none;
-  transition: color 0.2s, opacity 0.2s;
-  opacity: 0.88;
-}
 
-.insta-follow-link:hover {
-  opacity: 1;
-  color: #833ab4;
-}
 
 .info-item {
   display: flex;
@@ -1953,7 +1912,34 @@ video::-webkit-media-controls-mute-button {
   line-height: 1.6;
 }
 
-/* Request Form */
+/* ── Social stack below operating hours (Sanctuary section) ── */
+.sanc-social-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.sanc-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.sanc-social-link:hover {
+  transform: translateX(3px);
+  filter: brightness(1.2);
+}
+
+.sanc-social-link--insta { color: #c13584; }
+.sanc-social-link--fb    { color: #1877f2; }
+.sanc-social-link--yt    { color: #ff0000; }
+
 .form-card {
   background: var(--surface-container-low);
   border: 1px solid var(--outline-variant);
@@ -2061,27 +2047,30 @@ footer {
   padding-block: var(--sp-lg);
 }
 
-/* Instagram icon + text in footer brand column */
-.footer-insta-icon {
+/* Social icon row in footer brand column */
+.footer-social-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.footer-social-link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 10px;
-  padding: 5px 10px 5px 8px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 6px;
   color: rgba(248, 239, 234, 0.50);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  transition: color 0.22s, border-color 0.22s, background 0.22s;
+  transition: color 0.22s ease;
+  text-decoration: none;
 }
 
-.footer-insta-icon:hover {
-  color: #e1306c;
-  border-color: #e1306c;
-  background: rgba(225, 48, 108, 0.10);
-}
+.footer-social-link--insta:hover { color: #e1306c; }
+.footer-social-link--fb:hover    { color: #1877f2; }
+.footer-social-link--yt:hover    { color: #ff0000; }
 
 .footer-grid {
   display: grid;

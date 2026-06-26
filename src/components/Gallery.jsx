@@ -133,6 +133,13 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
                       controlsList="nodownload noremoteplayback"
                       disablePictureInPicture
                       onContextMenu={(e) => e.preventDefault()}
+                      onClick={(e) => {
+                        // Desktop only: block lightbox, toggle play/pause
+                        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                          e.stopPropagation()
+                          e.currentTarget.paused ? e.currentTarget.play() : e.currentTarget.pause()
+                        }
+                      }}
                     />
                     <span className="gi-video-badge" aria-hidden="true">▶</span>
                   </>
@@ -149,10 +156,6 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
                   />
                 )}
 
-                {/* ── zoom hint on hover ── */}
-                <div className="gi-zoom-hint" aria-hidden="true">
-                  <span className="gi-zoom-icon">⤢</span>
-                </div>
               </div>
 
               <div className="gi-info">

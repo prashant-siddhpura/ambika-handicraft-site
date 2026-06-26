@@ -76,9 +76,11 @@ export default function Hero({ active = false }) {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-hidden="true"
           onCanPlay={() => setVideoReady(true)}
+          onContextMenu={(e) => e.preventDefault()}
+          controlsList="nodownload"
         />
       </div>
 
