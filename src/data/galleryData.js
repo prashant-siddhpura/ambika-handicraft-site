@@ -34,7 +34,7 @@ export const galleryItems = [
     src: '/assests/3d_mahakali_maa.webp',
     alt: 'Mahakali Maa 3D LED wooden frame with intricate carved border and glowing LED lights',
     title: 'Shree Mahakali Maa',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ export const galleryItems = [
     src: '/assests/3d_brahmani_maa.webp',
     alt: 'Brahmani Maa 3D LED wooden frame with gold accents and warm glowing lights',
     title: 'Shree Brahmani Maa',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 3,
@@ -52,7 +52,7 @@ export const galleryItems = [
     src: '/assests/3d_goga_maharaj.webp',
     alt: 'Goga Maharaj 3D LED wooden frame with traditional Rajasthani motifs',
     title: 'Goga Maharaj',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 4,
@@ -60,7 +60,7 @@ export const galleryItems = [
     src: '/assests/3d_sikotar_maa.webp',
     alt: 'Sikotar Maa 3D LED wooden frame with traditional motifs',
     title: 'Shree Sikotar Maa',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 5,
@@ -68,7 +68,7 @@ export const galleryItems = [
     src: '/assests/3d_baan_maa.webp',
     alt: 'Baan Maa 3D LED wooden frame with traditional motifs',
     title: 'Shree Baan Maa',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 6,
@@ -76,7 +76,7 @@ export const galleryItems = [
     src: '/assests/3d_sadhi_maa.webp',
     alt: 'sadhi Maa 3D LED wooden frame with traditional motifs',
     title: 'Shree Sadhi Maa',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 7,
@@ -84,7 +84,7 @@ export const galleryItems = [
     src: '/assests/3d_meldi_maa_video.mp4',
     alt: 'Meldi Maa 3D LED wooden frame with traditional motifs',
     title: 'Shree Meldi Maa',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 8,
@@ -92,7 +92,7 @@ export const galleryItems = [
     src: '/assests/3d_shiv_parivar_video.mp4',
     alt: 'shiv parivar video',
     title: 'Shiv Parivar',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 9,
@@ -100,7 +100,7 @@ export const galleryItems = [
     src: '/assests/3d_goga_maharaj_video.mp4',
     alt: 'goga maharaj video',
     title: 'Goga Maharaj',
-    type: '3D LED Frame',
+    type: '3D PhotoFrame',
   },
   {
     id: 10,
@@ -108,7 +108,7 @@ export const galleryItems = [
     src: '/assests/3d_mogal_maa.webp',
     alt: '3d Mogal Maa',
     title: 'Mogal Maa',
-    type: '3D LED Frame'
+    type: '3D PhotoFrame'
 
   },
   {
@@ -118,7 +118,7 @@ export const galleryItems = [
     src: '/assests/3d_meldi_maa.webp',
     alt: '3d Meldi Maa',
     title: 'Meldi Maa',
-    type: '3D LED Frame'
+    type: '3D PhotoFrame'
 
   }
 ]

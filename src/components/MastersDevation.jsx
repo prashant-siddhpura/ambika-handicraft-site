@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
 
 const steps = [
-  { icon: '🪵', title: 'Wood Carving', desc: 'Precision crafting of premium timber into divine forms.' },
-  { icon: '🎨', title: 'Artisanal Painting', desc: 'Rich, traditional color palettes applied by hand.' },
-  { icon: '💎', title: 'Diamond Detailing', desc: 'Careful placement of stones for regal embellishment.' },
-  { icon: '💡', title: 'LED Wiring & Boxing', desc: 'Illuminating the spirit within a protective, premium frame.' },
+  { icon: '🪵', title: 'Hand Carved Wood', desc: 'We carve the designs directly on real wood by hand.' },
+  { icon: '🎨', title: 'Painted by Hand', desc: 'Our artists paint every detail using beautiful, bright colors.' },
+  { icon: '💎', title: 'Shiny Gemstones', desc: 'We stick colorful premium glass stones and polished gems.' },
+  { icon: '📦', title: 'Wooden Box Frame', desc: 'We fit the completed artwork inside a strong wooden box.' },
+  { icon: '💡', title: 'Warm LED Lights', desc: 'We add glowing lights inside to make the frame shine.' },
 ]
 
 export default function MastersDevation() {
@@ -31,13 +32,13 @@ export default function MastersDevation() {
   }, [])
 
   return (
-    <section id="process" className="masters-devotion" aria-label="The Master's Devotion – Our Process">
+    <section id="process" className="masters-devotion" aria-label="How We Create – Our Process">
       <div className="container">
         <div className="devotion-grid">
 
           {/* Title */}
           <div className="devotion-title-wrap reveal-title" ref={titleRef}>
-            <h2 className="section-title reveal-title-inner">The Master's Devotion</h2>
+            <h2 className="section-title reveal-title-inner">How We Create</h2>
           </div>
 
           {/* Artisan Photo */}
@@ -52,14 +53,13 @@ export default function MastersDevation() {
           {/* Content */}
           <div className="devotion-content reveal" ref={contentRef}>
             <p>
-              Every piece from Ambika Handicraft is born from a legacy of devotion and
-              meticulous skill. Our founder's journey is one of preserving the sacred
-              essence of Gujarati artistry while infusing it with modern elegance.
+              At Ambika Handicraft, every single frame is 100% handmade.
+              We make each piece with care, keeping our art alive.
             </p>
 
-            <p className="process-label">The Sacred Process</p>
+            <p className="process-label">Our Handmade Process</p>
 
-            <ol className="process-steps" aria-label="Four-step crafting process">
+            <ol className="process-steps" aria-label="Five-step crafting process">
               {steps.map((s) => (
                 <li key={s.title} className="step">
                   <div className="step-icon" aria-hidden="true">{s.icon}</div>

@@ -43,7 +43,7 @@ export default function SacredCreations({ onViewAll }) {
           {/* Title — stays centered */}
           <header className="section-header reveal" ref={headerRef}>
             <div className="reveal-title" ref={titleRef}>
-              <h2 className="section-title reveal-title-inner">Our Sacred Creations</h2>
+              <h2 className="section-title reveal-title-inner">Collections</h2>
             </div>
             <div className="section-divider">
               <span className="diamond" aria-hidden="true">✦</span>

@@ -1815,11 +1815,11 @@ video::-webkit-media-controls-mute-button {
   margin-bottom: var(--sp-md);
 } */
 
-.devotion-content p {
+.devotion-content>p {
   font-size: 15px;
   color: var(--on-surface-variant);
   line-height: 1.8;
-  margin-bottom: var(--sp-md);
+  margin-bottom: var(--sp-sm);
 }
 
 .process-label {
@@ -1829,8 +1829,13 @@ video::-webkit-media-controls-mute-button {
   text-transform: uppercase;
   color: var(--outline);
   border-top: 1px solid var(--outline-variant);
-  padding-top: var(--sp-md);
-  margin-bottom: var(--sp-md);
+  padding-top: 14px;
+  margin-bottom: 12px;
+  margin-top: 14px;
+}
+
+.step-text p {
+  margin: 0;
 }
 
 .process-steps {
@@ -1844,7 +1849,7 @@ video::-webkit-media-controls-mute-button {
   display: flex;
   align-items: flex-start;
   gap: var(--sp-sm);
-  padding: 8px 0px;
+  padding: 16px 0px;
   border-bottom: 1px solid var(--outline-variant);
 }
 
@@ -1939,6 +1944,11 @@ video::-webkit-media-controls-mute-button {
   gap: var(--sp-sm);
 }
 
+.info-item--socials {
+  margin-top: 18px;
+  margin-left: 48px;
+}
+
 .info-icon {
   width: 36px;
   height: 36px;
@@ -1968,39 +1978,47 @@ video::-webkit-media-controls-mute-button {
 }
 
 /* ── Social stack below operating hours (Sanctuary section) ── */
-.sanc-social-stack {
+.sanc-social-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 6px;
 }
 
-.sanc-social-link {
+.sanc-social-icon {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface-container-low);
+  color: var(--on-surface-variant);
+  border: 1px solid var(--outline-variant);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
-  transition: transform 0.18s ease, filter 0.18s ease;
 }
 
-.sanc-social-link:hover {
-  transform: translateX(3px);
-  filter: brightness(1.2);
+.sanc-social-icon:hover {
+  transform: translateY(-2px);
+  border-color: transparent;
+  color: #ffffff !important;
 }
 
-.sanc-social-link--insta {
-  color: #c13584;
+.sanc-social-icon--insta:hover {
+  background: #c13584;
 }
 
-.sanc-social-link--fb {
-  color: #1877f2;
+.sanc-social-icon--fb:hover {
+  background: #1877f2;
 }
 
-.sanc-social-link--yt {
-  color: #ff0000;
+.sanc-social-icon--yt:hover {
+  background: #ff0000;
+}
+
+.sanc-social-icon--wa:hover {
+  background: #25D366;
 }
 
 .form-card {
@@ -2141,6 +2159,10 @@ footer {
 
 .footer-social-link--yt:hover {
   color: #ff0000;
+}
+
+.footer-social-link--wa:hover {
+  color: #25D366;
 }
 
 .footer-grid {
@@ -2877,6 +2899,7 @@ footer {
   inset: 0;
   z-index: 10;
   background: transparent;
-  -webkit-touch-callout: none;   /* iOS long-press "Save to Photos" */
+  -webkit-touch-callout: none;
+  /* iOS long-press "Save to Photos" */
   user-select: none;
 }
