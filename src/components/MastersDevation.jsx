@@ -47,7 +47,11 @@ export default function MastersDevation() {
               src="/assests/artisan_workshop.webp"
               alt="Artisan hands crafting a wooden frame surrounded by gemstones and tools in a Gujarati workshop"
               loading="lazy"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
             />
+            <div className="no-save-overlay" />
           </div>
 
           {/* Content */}
