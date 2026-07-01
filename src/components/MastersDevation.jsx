@@ -57,9 +57,12 @@ export default function MastersDevation() {
           {/* Content */}
           <div className="devotion-content reveal" ref={contentRef}>
             <p>
-              At Ambika Handicraft, every single frame is 100% handmade.
-              We make each piece with care, keeping our art alive.
+              At Ambika Handicraft, every PhotoFrame is 100% handmade —
+              and we only make them on <strong>custom order</strong>. Orders are taken by Call.
+              You place your order, we craft it
+              just for you, with full care and attention from start to finish.
             </p>
+
 
             <p className="process-label">Our Handmade Process</p>
 

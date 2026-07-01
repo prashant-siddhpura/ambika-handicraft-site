@@ -7,13 +7,17 @@ import { useEffect, useRef, useState } from 'react'
  *   1. window 'load' event has fired (all assets fetched), AND
  *   2. MIN_MS milliseconds have elapsed (guarantees the full animation plays)
  *
+ * After both gates pass, an "Enter" button appears.
+ * onDone() is called only on that click — giving the browser a real user
+ * gesture so the hero video can autoplay WITH audio.
+ *
  * Props:
- *   onDone — called after the fade-out transition ends
+ *   onDone — called when the user clicks Enter and the fade-out ends
  */
 const MIN_MS = 2800   // minimum splash duration (ms)
 
-export default function LoadingScreen({ onDone }) {
-  const [phase, setPhase] = useState('in')  // 'in' | 'hold' | 'out'
+export default function LoadingScreen({ onDone, onEnterClick }) {
+  const [phase, setPhase] = useState('in')  // 'in' | 'hold' | 'ready' | 'out'
   const [progress, setProgress] = useState(0)      // 0–100
   const loadedRef = useRef(false)
   const timerDoneRef = useRef(false)
@@ -35,12 +39,12 @@ export default function LoadingScreen({ onDone }) {
     return () => cancelAnimationFrame(rafRef.current)
   }, [])
 
-  // Attempt to exit: both gates must be open
-  const tryExit = () => {
+  // Attempt to show Enter button: both gates must be open
+  const tryReady = () => {
     if (loadedRef.current && timerDoneRef.current) {
       setProgress(100)
-      // small delay so "100%" is visible before fade
-      setTimeout(() => setPhase('out'), 180)
+      // small delay so "100%" is visible before Enter button appears
+      setTimeout(() => setPhase('ready'), 300)
     }
   }
 
@@ -48,19 +52,19 @@ export default function LoadingScreen({ onDone }) {
     // Gate 1 — minimum timer
     const minTimer = setTimeout(() => {
       timerDoneRef.current = true
-      tryExit()
+      tryReady()
     }, MIN_MS)
 
-    // Gate 2 — window load event (all assets including hero.mp4)
+    // Gate 2 — window load event (all assets including hero-with-audio.mp4)
     const onLoad = () => {
       loadedRef.current = true
       setProgress((prev) => Math.max(prev, 95))
-      tryExit()
+      tryReady()
     }
 
     if (document.readyState === 'complete') {
       loadedRef.current = true
-      tryExit()
+      tryReady()
     } else {
       window.addEventListener('load', onLoad)
     }
@@ -71,6 +75,15 @@ export default function LoadingScreen({ onDone }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // User clicks Enter → real user gesture
+  // 1. Call onEnterClick FIRST (sync, still inside the gesture context)
+  //    → Hero.startAudio() → vid.play() — Safari requires this to be synchronous
+  // 2. Then start the fade-out animation
+  const handleEnter = () => {
+    onEnterClick?.()   // ← synchronous, inside the click handler
+    setPhase('out')    // ← starts CSS fade, onDone called after transition ends
+  }
 
   // Once CSS fade-out transition ends, call onDone to unmount
   const handleTransitionEnd = (e) => {
@@ -101,11 +114,6 @@ export default function LoadingScreen({ onDone }) {
         <span className="splash-brand-gu">અંબિકા હૅન્ડિક્રાફ્ટ</span>
       </div>
 
-      {/* ── Gold progress bar ── */}
-      {/* <div className="splash-bar-track" aria-hidden="true">
-        <div className="splash-bar-fill" />
-      </div> */}
-
       {/* ── Circular progress ring + percentage counter ── */}
       <div className="splash-ring-wrap" aria-hidden="true">
         <svg className="splash-ring-svg" viewBox="0 0 80 80">
@@ -133,6 +141,21 @@ export default function LoadingScreen({ onDone }) {
         </svg>
         <span className="splash-percent">{progress}%</span>
       </div>
+
+      {/* ── Enter button — appears after loading completes ── */}
+      <button
+        className={`splash-enter-btn${phase === 'ready' ? ' splash-enter-btn--visible' : ''}`}
+        onClick={handleEnter}
+        aria-label="Enter the site"
+        disabled={phase !== 'ready'}
+      >
+        <span className="splash-enter-label">Enter the site</span>
+        <svg className="splash-enter-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+        <span className="splash-enter-ring" aria-hidden="true" />
+      </button>
     </div>
   )
 }

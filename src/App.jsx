@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LoadingScreen from './components/LoadingScreen'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -13,6 +13,10 @@ export default function App() {
     return window.location.hash === '#gallery' ? 'gallery' : 'home'
   })
   const [showSplash, setShowSplash] = useState(true)
+
+  // Ref to Hero so we can call startAudio() synchronously from the Enter
+  // button's click handler — required for Safari autoplay-with-sound policy
+  const heroRef = useRef(null)
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -38,12 +42,18 @@ export default function App() {
   }, [])
 
   const goGallery = () => { window.location.hash = '#gallery' }
-  const goHome = () => { window.location.hash = '#home' }
+  const goHome    = () => { window.location.hash = '#home' }
+
+  // Called synchronously inside the Enter button's onClick — starts audio
+  // while still inside the browser's user-gesture context (works on Safari)
+  const handleEnterClick = () => {
+    heroRef.current?.startAudio()
+  }
 
   if (page === 'gallery') {
     return (
       <>
-        {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} />}
+        {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} onEnterClick={handleEnterClick} />}
         <Navbar onGalleryClick={goGallery} onHomeClick={goHome} theme="light" />
         <Gallery onGalleryClick={goGallery} onHomeClick={goHome} />
       </>
@@ -52,10 +62,10 @@ export default function App() {
 
   return (
     <>
-      {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} />}
+      {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} onEnterClick={handleEnterClick} />}
       <Navbar onGalleryClick={goGallery} onHomeClick={goHome} />
       <main>
-        <Hero active={!showSplash} />
+        <Hero ref={heroRef} active={!showSplash} />
         <SacredCreations onViewAll={goGallery} />
         <MastersDevation />
         <Sanctuary />

@@ -1,14 +1,43 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react'
 
-export default function Hero({ active = false }) {
+// forwardRef so App can hold a ref to Hero and call startAudio() directly
+// from inside the LoadingScreen's click handler (required for Safari autoplay)
+const Hero = forwardRef(function Hero({ active = false }, ref) {
   const [hidden, setHidden] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
 
-  const sectionRef = useRef(null)
-  const videoRef = useRef(null)
-  const overlayRef = useRef(null)
-  const headingRef = useRef(null)
-  const rafRef = useRef(null)
+  const sectionRef  = useRef(null)
+  const videoRef    = useRef(null)
+  const overlayRef  = useRef(null)
+  const headingRef  = useRef(null)
+  const rafRef      = useRef(null)
+
+  // Expose startAudio() so App can call it synchronously from the Enter click
+  // handler — this keeps the call inside the browser's user-gesture context,
+  // which is required by Safari (and is best practice for all browsers).
+  useImperativeHandle(ref, () => ({
+    startAudio() {
+      const vid = videoRef.current
+      if (!vid) return
+      vid.currentTime = 0
+      vid.muted = false
+      vid.play().catch(() => {
+        // Strict browser (e.g. some iOS modes) blocked unmuted — fall back
+        vid.muted = true
+        vid.play().catch(() => { })
+      })
+
+      // After the first complete play, mute and loop silently forever
+      const onFirstEnd = () => {
+        vid.muted = true
+        vid.loop = true           // switch on native loop for silent replays
+        vid.currentTime = 0
+        vid.play().catch(() => { })
+        vid.removeEventListener('ended', onFirstEnd)
+      }
+      vid.addEventListener('ended', onFirstEnd)
+    }
+  }))
 
   // Hide headings permanently after 6s — only start timer once active
   useEffect(() => {
@@ -17,16 +46,13 @@ export default function Hero({ active = false }) {
     return () => clearTimeout(t)
   }, [active])
 
-  // Play/pause video based on splash state
+  // When active flips true (after loading screen fade-out) the video is already
+  // playing with audio (started by startAudio above). Nothing extra needed here
+  // except pausing if somehow active goes false.
   useEffect(() => {
     const vid = videoRef.current
     if (!vid) return
-    if (active) {
-      vid.currentTime = 0   // always start from the very beginning
-      vid.play().catch(() => { })  // catch needed for strict browser autoplay policies
-    } else {
-      vid.pause()
-    }
+    if (!active) vid.pause()
   }, [active])
 
   // Scroll-driven overlay darkening
@@ -37,11 +63,10 @@ export default function Hero({ active = false }) {
     const onScroll = () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       rafRef.current = requestAnimationFrame(() => {
-        const scrollY = window.scrollY
+        const scrollY  = window.scrollY
         const sectionH = section.offsetHeight
         const progress = Math.max(0, Math.min(1, scrollY / sectionH))
 
-        // Overlay darkens as user scrolls away
         if (overlayRef.current) {
           const e = progress * 0.28
           overlayRef.current.style.background = `
@@ -67,16 +92,14 @@ export default function Hero({ active = false }) {
       className="hero-section"
       aria-label="Hero section"
     >
-      {/* ── Video background ── */}
+      {/* ── Video background — no `loop` attr initially so `ended` fires ── */}
       <div className="hero-video-wrap">
         <video
           ref={videoRef}
           className={`hero-video${videoReady ? ' hero-video--ready' : ''}`}
-          src="/hero.mp4?v=3"
-          loop
-          muted
+          src="/hero-with-audio.mp4"
           playsInline
-          preload="metadata"
+          preload="auto"
           aria-hidden="true"
           onCanPlay={() => setVideoReady(true)}
           onContextMenu={(e) => e.preventDefault()}
@@ -87,7 +110,7 @@ export default function Hero({ active = false }) {
       {/* ── Dark vignette overlay ── */}
       <div className="hero-canvas-overlay" ref={overlayRef} />
 
-      {/* ── Headings — visible for 3.5s then fades out forever ── */}
+      {/* ── Headings — visible for 6s then fades out forever ── */}
       <div
         className={`hero-headings${hidden ? ' hero-headings--hidden' : ''}${active ? ' hero-headings--ready' : ''}`}
         ref={headingRef}
@@ -97,4 +120,6 @@ export default function Hero({ active = false }) {
       </div>
     </section>
   )
-}
+})
+
+export default Hero

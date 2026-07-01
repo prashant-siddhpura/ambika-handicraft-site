@@ -89,7 +89,7 @@ export const galleryItems = [
   {
     id: 8,
     order: 4,
-    src: '/assests/3d_shiv_parivar_video.mp4',
+    src: '/assests/3d_shivparivar_video.mp4',
     alt: 'shiv parivar video',
     title: 'Shiv Parivar',
     type: '3D PhotoFrame',
@@ -120,6 +120,14 @@ export const galleryItems = [
     title: 'Meldi Maa',
     type: '3D PhotoFrame'
 
+  },
+  {
+    id: 12,
+    order: 12,
+    src: '/assests/2d_chamunda_maa.webp',
+    alt: '2d Chamunda Maa',
+    title: 'Chamunda Maa',
+    type: '2D PhotoFrame'
   }
 ]
 
