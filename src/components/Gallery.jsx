@@ -26,7 +26,7 @@ function applyMasonrySpans(grid) {
   })
 }
 
-export default function Gallery({ onGalleryClick, onHomeClick }) {
+export default function Gallery({ onGalleryClick, onHomeClick, visible = false }) {
   const gridRef = useRef(null)
 
   // ── Gallery loading overlay ───────────────────────────────────────────────
@@ -55,6 +55,22 @@ export default function Gallery({ onGalleryClick, onHomeClick }) {
     const t = setTimeout(triggerFadeOut, 3000)
     return () => clearTimeout(t)
   }, [triggerFadeOut])
+
+  // Reset overlay + scroll every time gallery becomes visible
+  // (needed because Gallery is always mounted — display:none toggled by App)
+  useEffect(() => {
+    if (!visible) return
+    // Scroll to top (in case user was scrolled on home)
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    // Reset overlay so it shows the loading spinner again
+    clearedRef.current = false
+    loadedCountRef.current = 0
+    setOverlayFading(false)
+    setOverlayVisible(true)
+    // Start the 3s safety fallback again
+    const t = setTimeout(triggerFadeOut, 3000)
+    return () => clearTimeout(t)
+  }, [visible, triggerFadeOut])
 
   // ── Lightbox state ────────────────────────────────────────────────────────
   const [lbIndex, setLbIndex] = useState(null) // null = closed

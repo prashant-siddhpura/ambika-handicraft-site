@@ -23,6 +23,7 @@ export default function App() {
       const isGallery = window.location.hash === '#gallery'
       setPage((prevPage) => {
         if (prevPage === 'gallery' && !isGallery) {
+          // Coming back to home — scroll to the right section
           const targetId = window.location.hash.slice(1)
           if (!targetId || targetId === 'home') {
             requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' }))
@@ -32,6 +33,10 @@ export default function App() {
               if (el) el.scrollIntoView({ behavior: 'smooth' })
             })
           }
+        }
+        if (isGallery && prevPage !== 'gallery') {
+          // Going to gallery — always scroll to top
+          requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' }))
         }
         return isGallery ? 'gallery' : 'home'
       })
@@ -79,7 +84,7 @@ export default function App() {
 
       {/* ── Gallery page — always mounted, hidden when on home ── */}
       <div style={{ display: onGallery ? 'block' : 'none' }}>
-        <Gallery onGalleryClick={goGallery} onHomeClick={goHome} />
+        <Gallery onGalleryClick={goGallery} onHomeClick={goHome} visible={onGallery} />
       </div>
     </>
   )
