@@ -128,6 +128,22 @@ export const galleryItems = [
     alt: '2d Chamunda Maa',
     title: 'Chamunda Maa',
     type: '2D PhotoFrame'
+  },
+  {
+    id: 13,
+    order: 13,
+    src: '/assests/3d_jogni_maa.webp',
+    alt: '3d Jogni Maa',
+    title: 'Jogni Maa',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 14,
+    order: 14,
+    src: '/assests/ramapir_video.mp4',
+    alt: 'Ramapir Video',
+    title: 'Jay Ramapir',
+    type: '2D PhotoFrame'
   }
 ]
 

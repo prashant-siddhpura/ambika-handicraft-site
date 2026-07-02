@@ -46,13 +46,31 @@ const Hero = forwardRef(function Hero({ active = false }, ref) {
     return () => clearTimeout(t)
   }, [active])
 
-  // When active flips true (after loading screen fade-out) the video is already
-  // playing with audio (started by startAudio above). Nothing extra needed here
-  // except pausing if somehow active goes false.
+  // Sync video playback with `active` state.
+  //
+  // Three cases this handles:
+  //  A) First load, active=false → loading screen visible, do nothing.
+  //  B) First load, active flips true → startAudio() already kicked the video
+  //     off (synchronously in the Enter click handler). vid.paused is false, so
+  //     we skip — no conflict.
+  //  C) Re-mount after gallery navigation → Hero is brand-new, active is already
+  //     true, vid.paused is true. Start a muted loop (audio already played once).
   useEffect(() => {
     const vid = videoRef.current
     if (!vid) return
-    if (!active) vid.pause()
+
+    if (!active) {
+      vid.pause()
+      return
+    }
+
+    // Case C: component re-mounted with active already true (back from gallery)
+    if (vid.paused) {
+      vid.muted = true
+      vid.loop  = true
+      vid.currentTime = 0
+      vid.play().catch(() => { })
+    }
   }, [active])
 
   // Scroll-driven overlay darkening

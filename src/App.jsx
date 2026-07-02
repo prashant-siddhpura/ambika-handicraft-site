@@ -42,7 +42,7 @@ export default function App() {
   }, [])
 
   const goGallery = () => { window.location.hash = '#gallery' }
-  const goHome    = () => { window.location.hash = '#home' }
+  const goHome = () => { window.location.hash = '#home' }
 
   // Called synchronously inside the Enter button's onClick — starts audio
   // while still inside the browser's user-gesture context (works on Safari)
@@ -50,27 +50,37 @@ export default function App() {
     heroRef.current?.startAudio()
   }
 
-  if (page === 'gallery') {
-    return (
-      <>
-        {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} onEnterClick={handleEnterClick} />}
-        <Navbar onGalleryClick={goGallery} onHomeClick={goHome} theme="light" />
-        <Gallery onGalleryClick={goGallery} onHomeClick={goHome} />
-      </>
-    )
-  }
+  // Single render — both pages always stay mounted.
+  // We toggle visibility with display:none so Hero (and its video) never
+  // unmounts/remounts when the user navigates between home and gallery.
+  const onHome = page !== 'gallery'
+  const onGallery = page === 'gallery'
 
   return (
     <>
       {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} onEnterClick={handleEnterClick} />}
-      <Navbar onGalleryClick={goGallery} onHomeClick={goHome} />
-      <main>
-        <Hero ref={heroRef} active={!showSplash} />
-        <SacredCreations onViewAll={goGallery} />
-        <MastersDevation />
-        <Sanctuary />
-      </main>
-      <Footer />
+
+      <Navbar
+        onGalleryClick={goGallery}
+        onHomeClick={goHome}
+        theme={onGallery ? 'light' : undefined}
+      />
+
+      {/* ── Home page — always mounted, hidden when on gallery ── */}
+      <div style={{ display: onHome ? 'block' : 'none' }}>
+        <main>
+          <Hero ref={heroRef} active={!showSplash} />
+          <SacredCreations onViewAll={goGallery} />
+          <MastersDevation />
+          <Sanctuary />
+        </main>
+        <Footer />
+      </div>
+
+      {/* ── Gallery page — always mounted, hidden when on home ── */}
+      <div style={{ display: onGallery ? 'block' : 'none' }}>
+        <Gallery onGalleryClick={goGallery} onHomeClick={goHome} />
+      </div>
     </>
   )
 }
