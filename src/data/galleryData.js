@@ -144,6 +144,14 @@ export const galleryItems = [
     alt: 'Ramapir Video',
     title: 'Jay Ramapir',
     type: '2D PhotoFrame'
+  },
+  {
+    id: 15,
+    order: 15,
+    src: '/assests/3d_bahuchar_maa.webp',
+    alt: '3D Bahuchar Maa',
+    title: 'Bahuchar Maa',
+    type: '3D PhotoFrame'
   }
 ]
 

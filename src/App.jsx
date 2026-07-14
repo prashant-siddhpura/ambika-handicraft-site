@@ -7,6 +7,8 @@ import MastersDevation from './components/MastersDevation'
 import Sanctuary from './components/Sanctuary'
 import Footer from './components/Footer'
 import Gallery from './components/Gallery'
+import GoogleReviews from './components/GoogleReviews'   // Elfsight — keep for future use
+import CustomerReviews from './components/CustomerReviews'
 
 export default function App() {
   const [page, setPage] = useState(() => {
@@ -77,6 +79,7 @@ export default function App() {
           <Hero ref={heroRef} active={!showSplash} />
           <SacredCreations onViewAll={goGallery} />
           <MastersDevation />
+          <CustomerReviews />
           <Sanctuary />
         </main>
         <Footer />
