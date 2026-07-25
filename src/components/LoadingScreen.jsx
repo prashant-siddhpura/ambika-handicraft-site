@@ -14,9 +14,10 @@ import { useEffect, useRef, useState } from 'react'
  * Props:
  *   onDone — called when the user clicks Enter and the fade-out ends
  */
-const MIN_MS = 2800   // minimum splash duration (ms)
+const MIN_MS = 2800     // minimum splash duration (ms)
+const MAX_MS = 8000     // hard ceiling — show Enter even if video is very slow
 
-export default function LoadingScreen({ onDone, onEnterClick }) {
+export default function LoadingScreen({ onDone, onEnterClick, videoReady = false }) {
   const [phase, setPhase] = useState('in')  // 'in' | 'hold' | 'ready' | 'out'
   const [progress, setProgress] = useState(0)      // 0–100
   const loadedRef = useRef(false)
@@ -39,14 +40,27 @@ export default function LoadingScreen({ onDone, onEnterClick }) {
     return () => cancelAnimationFrame(rafRef.current)
   }, [])
 
-  // Attempt to show Enter button: both gates must be open
+  // Attempt to show Enter button: all three gates must be open
+  //   Gate 1 — MIN_MS timer elapsed
+  //   Gate 2 — window 'load' fired
+  //   Gate 3 — hero video canplay fired (videoReady prop)
   const tryReady = () => {
-    if (loadedRef.current && timerDoneRef.current) {
+    if (loadedRef.current && timerDoneRef.current && videoReadyRef.current) {
       setProgress(100)
       // small delay so "100%" is visible before Enter button appears
       setTimeout(() => setPhase('ready'), 300)
     }
   }
+
+  // Gate 3 — video ready (passed as prop from Hero via App)
+  const videoReadyRef = useRef(false)
+  useEffect(() => {
+    if (videoReady) {
+      videoReadyRef.current = true
+      tryReady()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoReady])
 
   useEffect(() => {
     // Gate 1 — minimum timer
@@ -55,12 +69,21 @@ export default function LoadingScreen({ onDone, onEnterClick }) {
       tryReady()
     }, MIN_MS)
 
-    // Gate 2 — window load event (all assets including hero-with-audio.mp4)
+    // Gate 2 — window load event
     const onLoad = () => {
       loadedRef.current = true
       setProgress((prev) => Math.max(prev, 95))
       tryReady()
     }
+
+    // Hard ceiling — show Enter after MAX_MS regardless of video
+    const maxTimer = setTimeout(() => {
+      loadedRef.current = true
+      timerDoneRef.current = true
+      videoReadyRef.current = true
+      setProgress(100)
+      setTimeout(() => setPhase('ready'), 300)
+    }, MAX_MS)
 
     if (document.readyState === 'complete') {
       loadedRef.current = true
@@ -71,6 +94,7 @@ export default function LoadingScreen({ onDone, onEnterClick }) {
 
     return () => {
       clearTimeout(minTimer)
+      clearTimeout(maxTimer)
       window.removeEventListener('load', onLoad)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -9,7 +9,9 @@ const WA_URL = `https://wa.me/${WA_NUMBER}?text=Hello%2C%20I%20would%20like%20to
 const ROW_UNIT = 10  // px — matches grid-auto-rows: 10px
 const ROW_GAP = 14  // px — matches gap: 14px
 
-const READY_THRESHOLD = 0.8  // show gallery once 80% of media is loaded
+const READY_THRESHOLD = 0.6  // show gallery once 60% of initial batch is loaded
+const INITIAL_COUNT = 8      // items shown on first load
+const LOAD_MORE_COUNT = 8    // items added per "Load More" click
 
 /**
  * Sets grid-row-end: span N on each card so the grid acts as a masonry layout.
@@ -29,12 +31,21 @@ function applyMasonrySpans(grid) {
 export default function Gallery({ onGalleryClick, onHomeClick, visible = false }) {
   const gridRef = useRef(null)
 
+  // ── Load More pagination ──────────────────────────────────────────────────
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT)
+  const visibleItems = sortedGalleryItems.slice(0, visibleCount)
+  const hasMore = visibleCount < sortedGalleryItems.length
+
+  const loadMore = () => {
+    setVisibleCount((c) => Math.min(c + LOAD_MORE_COUNT, sortedGalleryItems.length))
+  }
+
   // ── Gallery loading overlay ───────────────────────────────────────────────
   const [overlayVisible, setOverlayVisible] = useState(true)   // controls render
   const [overlayFading, setOverlayFading] = useState(false)    // triggers CSS fade-out
   const loadedCountRef = useRef(0)
   const clearedRef = useRef(false)
-  const total = sortedGalleryItems.length
+  const initialTotal = Math.min(INITIAL_COUNT, sortedGalleryItems.length)
 
   const triggerFadeOut = useCallback(() => {
     if (clearedRef.current) return
@@ -45,30 +56,27 @@ export default function Gallery({ onGalleryClick, onHomeClick, visible = false }
 
   const onMediaLoaded = useCallback(() => {
     loadedCountRef.current += 1
-    if (total > 0 && loadedCountRef.current / total >= READY_THRESHOLD) {
+    if (initialTotal > 0 && loadedCountRef.current / initialTotal >= READY_THRESHOLD) {
       setTimeout(triggerFadeOut, 120) // small settle delay
     }
-  }, [total, triggerFadeOut])
+  }, [initialTotal, triggerFadeOut])
 
-  // Safety fallback — always clear overlay after 3s even if media is slow
+  // Safety fallback — clear overlay after 1.2s (only 8 items load initially, not all 24)
   useEffect(() => {
-    const t = setTimeout(triggerFadeOut, 3000)
+    const t = setTimeout(triggerFadeOut, 1200)
     return () => clearTimeout(t)
   }, [triggerFadeOut])
 
   // Reset overlay + scroll every time gallery becomes visible
-  // (needed because Gallery is always mounted — display:none toggled by App)
   useEffect(() => {
     if (!visible) return
-    // Scroll to top (in case user was scrolled on home)
     window.scrollTo({ top: 0, behavior: 'instant' })
-    // Reset overlay so it shows the loading spinner again
     clearedRef.current = false
     loadedCountRef.current = 0
     setOverlayFading(false)
     setOverlayVisible(true)
-    // Start the 3s safety fallback again
-    const t = setTimeout(triggerFadeOut, 3000)
+    setVisibleCount(INITIAL_COUNT)  // reset pagination when re-entering gallery
+    const t = setTimeout(triggerFadeOut, 1200)
     return () => clearTimeout(t)
   }, [visible, triggerFadeOut])
 
@@ -80,42 +88,19 @@ export default function Gallery({ onGalleryClick, onHomeClick, visible = false }
   const prevItem = () => setLbIndex((i) => Math.max(0, i - 1))
   const nextItem = () => setLbIndex((i) => Math.min(sortedGalleryItems.length - 1, i + 1))
 
-  // ── Staggered reveal (IntersectionObserver) ──────────────────────
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
-
-    const cards = gridRef.current?.querySelectorAll('.gi-card') ?? []
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !entry.target.classList.contains('visible')) {
-            const allCards = [...(gridRef.current?.querySelectorAll('.gi-card') ?? [])]
-            const delay = allCards.indexOf(entry.target) * 60
-            setTimeout(() => entry.target.classList.add('visible'), delay)
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.06 }
-    )
-    cards.forEach((card) => observer.observe(card))
-    return () => observer.disconnect()
-  }, [])
-
   // ── Grid masonry: span calculation ───────────────────────────────
   const layout = useCallback(() => {
     const grid = gridRef.current
     if (grid) applyMasonrySpans(grid)
   }, [])
 
+  // Re-run masonry + rewire observer whenever visibleCount changes
   useEffect(() => {
     const grid = gridRef.current
     if (!grid) return
 
-    // Run once immediately (for any already-cached images)
     layout()
 
-    // Re-run when each image/video finishes loading
     const media = [...grid.querySelectorAll('img, video')]
     media.forEach((el) => {
       if (el.tagName === 'IMG') {
@@ -125,18 +110,34 @@ export default function Gallery({ onGalleryClick, onHomeClick, visible = false }
       }
     })
 
-    // Also run a short delay pass in case lazy images load just after mount
     const t = setTimeout(layout, 300)
 
-    // Re-layout on every resize
+    // Staggered reveal for ALL cards (newly added ones won't have .visible yet)
+    const cards = grid.querySelectorAll('.gi-card:not(.visible)')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.classList.contains('visible')) {
+            const allCards = [...(grid.querySelectorAll('.gi-card') ?? [])]
+            const delay = allCards.indexOf(entry.target) * 60
+            setTimeout(() => entry.target.classList.add('visible'), delay)
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.06 }
+    )
+    cards.forEach((card) => observer.observe(card))
+
     const ro = new ResizeObserver(layout)
     ro.observe(grid)
 
     return () => {
       clearTimeout(t)
+      observer.disconnect()
       ro.disconnect()
     }
-  }, [layout])
+  }, [layout, visibleCount]) // re-run when more items are loaded
 
   return (
     <div className="gallery-page" role="main" aria-label="Full Gallery">
@@ -159,7 +160,7 @@ export default function Gallery({ onGalleryClick, onHomeClick, visible = false }
       {/* ── Grid masonry ─────────────────────────────── */}
       <div className="gallery-container">
         <div className="gallery-masonry" ref={gridRef} role="list">
-          {sortedGalleryItems.map((item, idx) => (
+          {visibleItems.map((item, idx) => (
             <article
               key={item.id}
               className="gi-card"
@@ -226,6 +227,27 @@ export default function Gallery({ onGalleryClick, onHomeClick, visible = false }
             Gallery coming soon. Add images to <code>public/assests/</code> and register them in{' '}
             <code>src/data/galleryData.js</code>.
           </p>
+        )}
+
+        {/* ── Load More button ─────────────────────────── */}
+        {hasMore && (
+          <div className="gi-load-more-wrap">
+            <button className="gi-load-more-btn" onClick={loadMore} aria-label="Load more gallery items">
+              <span className="gi-load-more-label">Load More</span>
+              <svg className="gi-load-more-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          </div>
+        )}
+
+        {/* ── All loaded message ───────────────────────── */}
+        {!hasMore && sortedGalleryItems.length > INITIAL_COUNT && (
+          <div className="gi-all-loaded">
+            <span className="gi-all-loaded-line" aria-hidden="true" />
+            <span className="gi-all-loaded-text">All creations displayed</span>
+            <span className="gi-all-loaded-line" aria-hidden="true" />
+          </div>
         )}
       </div>
 

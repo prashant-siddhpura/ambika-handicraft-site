@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 're
 
 // forwardRef so App can hold a ref to Hero and call startAudio() directly
 // from inside the LoadingScreen's click handler (required for Safari autoplay)
-const Hero = forwardRef(function Hero({ active = false }, ref) {
+const Hero = forwardRef(function Hero({ active = false, onVideoReady }, ref) {
   const [hidden, setHidden] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
 
@@ -119,7 +119,7 @@ const Hero = forwardRef(function Hero({ active = false }, ref) {
           playsInline
           preload="auto"
           aria-hidden="true"
-          onCanPlay={() => setVideoReady(true)}
+          onCanPlay={() => { setVideoReady(true); onVideoReady?.() }}
           onContextMenu={(e) => e.preventDefault()}
           controlsList="nodownload"
         />

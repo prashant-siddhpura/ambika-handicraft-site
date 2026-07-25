@@ -18,6 +18,15 @@ export const GOOGLE_REVIEW_URL =
 export const reviews = [
   {
     id: 1,
+    name: 'Hiral Gajjar',
+    rating: 5,
+    relativeTime: 'a day ago',
+    text: 'હું હીરલ ગજ્જર, USA થી આ રિવ્યૂ લખી રહી છું. ચામુંડા માતાજીનો ફોટો જોઈને હું ખરેખર ખૂબ જ ભાવવિભોર થઈ ગઈ. ફોટો એટલો જીવંત અને સુંદર બનાવ્યો છે ભાસ્કરભાઇ એ કે જાણે મા ચામુંડા સાક્ષાત્ સામે બિરાજમાન હોય એવો દિવ્ય અનુભવ થાય છે. દરેક નાની-મોટી ડિટેલ ખૂબ જ સુંદર રીતે તૈયાર કરવામાં આવી છે. આટલી સુંદર સેવા અને સમર્પણ માટે હૃદયપૂર્વક આભાર. હું દિલથી ભલામણ કરું છું. મા ચામુંડા આપ પર સદાય કૃપા વરસાવે. જય મા ચામુંડા! 🙏🌺 – હીરલ ગજ્જર, USA',
+    lang: 'gu',
+  }
+  ,
+  {
+    id: 6,
     name: 'Hemant Prajapati',
     rating: 5,
     relativeTime: '2 months ago',
@@ -25,7 +34,7 @@ export const reviews = [
     lang: 'gu',
   },
   {
-    id: 2,
+    id: 3,
     name: 'AJAY PRAJAPATI',
     rating: 5,
     relativeTime: '3 months ago',
@@ -33,7 +42,7 @@ export const reviews = [
     lang: 'gu',
   },
   {
-    id: 3,
+    id: 4,
     name: 'Mayank Patel',
     rating: 5,
     relativeTime: '1 month ago',
@@ -41,7 +50,7 @@ export const reviews = [
     lang: 'gu',
   },
   {
-    id: 4,
+    id: 5,
     name: 'Bhavika Tank',
     rating: 5,
     relativeTime: '4 months ago',
@@ -49,7 +58,7 @@ export const reviews = [
     lang: 'en',
   },
   {
-    id: 5,
+    id: 2,
     name: 'Chirag Patel',
     rating: 5,
     relativeTime: '5 months ago',
@@ -57,7 +66,7 @@ export const reviews = [
     lang: 'en',
   },
   {
-    id: 6,
+    id: 7,
     name: 'Nidhi Panchal',
     rating: 5,
     relativeTime: '2 months ago',
@@ -65,7 +74,7 @@ export const reviews = [
     lang: 'en',
   },
   {
-    id: 7,
+    id: 8,
     name: 'Vipul Faga',
     rating: 5,
     relativeTime: '6 months ago',
@@ -73,7 +82,7 @@ export const reviews = [
     lang: 'en',
   },
   {
-    id: 8,
+    id: 9,
     name: 'Bhavishaben Parmar',
     rating: 5,
     relativeTime: '3 months ago',
@@ -81,7 +90,7 @@ export const reviews = [
     lang: 'en',
   },
   {
-    id: 9,
+    id: 10,
     name: 'Bhavin Raval',
     rating: 5,
     relativeTime: '1 month ago',
@@ -90,7 +99,7 @@ export const reviews = [
   },
 
   {
-    id: 10,
+    id: 11,
     name: 'Priya Patel',
     rating: 5,
     relativeTime: '2 weeks ago',

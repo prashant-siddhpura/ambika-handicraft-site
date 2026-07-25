@@ -39,11 +39,20 @@ export const galleryItems = [
   {
     id: 2,
     order: 2,
-    homePreview: true,                 // ← shows on home page (slot 2)
     src: '/assests/3d_brahmani_maa.webp',
     alt: 'Brahmani Maa 3D LED wooden frame with gold accents and warm glowing lights',
     title: 'Shree Brahmani Maa',
     type: '3D PhotoFrame',
+  },
+  {
+    id: 11,
+    order: 11,
+    homePreview: true,
+    src: '/assests/3d_meldi_maa.webp',
+    alt: '3d Meldi Maa',
+    title: 'Meldi Maa',
+    type: '3D PhotoFrame'
+
   },
   {
     id: 3,
@@ -111,16 +120,7 @@ export const galleryItems = [
     type: '3D PhotoFrame'
 
   },
-  {
-    id: 11,
-    order: 11,
-    homePreview: true,
-    src: '/assests/3d_meldi_maa.webp',
-    alt: '3d Meldi Maa',
-    title: 'Meldi Maa',
-    type: '3D PhotoFrame'
 
-  },
   {
     id: 12,
     order: 12,
@@ -151,6 +151,79 @@ export const galleryItems = [
     src: '/assests/3d_bahuchar_maa.webp',
     alt: '3D Bahuchar Maa',
     title: 'Bahuchar Maa',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 16,
+    order: 16,
+    src: '/assests/2d_dwarkadhis.webp',
+    alt: '2D DwarkaDhis',
+    title: 'Dwarkadhis',
+    type: '2D PhotoFrame'
+  },
+  {
+    id: 17,
+    order: 17,
+    src: '/assests/2d_khodiyar_maa.webp',
+    alt: '2D Khodiyar Maa',
+    title: 'Khodiyar Maa',
+    type: '2D PhotoFrame',
+    homePreview: true
+  },
+  {
+    id: 18,
+    order: 18,
+    src: '/assests/2d_vishvakarma_dada.webp',
+    alt: '2D Vishvakarma Dada',
+    title: 'Vishvakarma Dada',
+    type: '2D PhotoFrame'
+  },
+  {
+    id: 19,
+    order: 19,
+    src: '/assests/3d_balapir_maharaj.webp',
+    alt: '3D Balapir Maharaj',
+    title: 'Balapir Maharaj',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 20,
+    order: 20,
+    src: '/assests/3d_nagneshvari_maa.webp',
+    alt: '3D Nagneshvari Maa',
+    title: 'Nagneshvari Maa',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 21,
+    order: 21,
+    src: '/assests/3d_shundha_maa.webp',
+    alt: '3D Shundha Maa',
+    title: 'Shundha Maa',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 22,
+    order: 22,
+    src: '/assests/3d_swaminarayan.webp',
+    alt: '3D Swaminarayan',
+    title: 'Swaminarayan',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 23,
+    order: 23,
+    src: '/assests/3d_but_bhavani_maa.webp',
+    alt: '3D But Bhavani Maa',
+    title: 'But Bhavani Maa',
+    type: '3D PhotoFrame'
+  },
+  {
+    id: 24,
+    order: 24,
+    src: '/assests/3d_maa_bhadrakali.webp',
+    alt: '3D Maa Bhadrakali',
+    title: 'Maa Bhadrakali',
     type: '3D PhotoFrame'
   }
 ]

@@ -15,6 +15,7 @@ export default function App() {
     return window.location.hash === '#gallery' ? 'gallery' : 'home'
   })
   const [showSplash, setShowSplash] = useState(true)
+  const [heroVideoReady, setHeroVideoReady] = useState(false)
 
   // Ref to Hero so we can call startAudio() synchronously from the Enter
   // button's click handler — required for Safari autoplay-with-sound policy
@@ -65,7 +66,7 @@ export default function App() {
 
   return (
     <>
-      {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} onEnterClick={handleEnterClick} />}
+      {showSplash && <LoadingScreen onDone={() => setShowSplash(false)} onEnterClick={handleEnterClick} videoReady={heroVideoReady} />}
 
       <Navbar
         onGalleryClick={goGallery}
@@ -76,7 +77,7 @@ export default function App() {
       {/* ── Home page — always mounted, hidden when on gallery ── */}
       <div style={{ display: onHome ? 'block' : 'none' }}>
         <main>
-          <Hero ref={heroRef} active={!showSplash} />
+          <Hero ref={heroRef} active={!showSplash} onVideoReady={() => setHeroVideoReady(true)} />
           <SacredCreations onViewAll={goGallery} />
           <MastersDevation />
           <CustomerReviews />
